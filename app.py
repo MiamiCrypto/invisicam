@@ -57,12 +57,12 @@ if uploaded_file:
     else:
         st.success(f"Blurred {len(masks)} sensitive region(s).")
 
-        # Accurate hex to RGB to BGR conversion for OpenCV
+        # Use RGB directly instead of converting to BGR
         hex_color = outline_color.lstrip("#")
         r = int(hex_color[0:2], 16)
         g = int(hex_color[2:4], 16)
         b = int(hex_color[4:6], 16)
-        bgr_color = (b, g, r)  # Corrected: match Streamlit RGB to OpenCV BGR
+        rgb_color = (r, g, b)  # RGB color passed directly to OpenCV in apply_blur_with_mask_overlay
 
         if preview_only:
             result = image_np.copy()
@@ -71,7 +71,7 @@ if uploaded_file:
                 mask = (mask > 0.5).astype(np.uint8)
                 mask = cv2.resize(mask, (result.shape[1], result.shape[0]))
                 contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                cv2.drawContours(mask_overlay, contours, -1, bgr_color, thickness=4)
+                cv2.drawContours(mask_overlay, contours, -1, rgb_color, thickness=4)
             result = cv2.addWeighted(result, 1, mask_overlay, 1, 0)
         else:
             result = apply_blur_with_mask_overlay(
@@ -79,7 +79,7 @@ if uploaded_file:
                 masks,
                 strength=blur_strength,
                 draw_outline=show_contours,
-                outline_color=bgr_color
+                outline_color=rgb_color
             )
 
         st.image(result, caption="🔒 Privacy-Protected Image", use_container_width=True)
