@@ -30,7 +30,7 @@ with st.container():
         """
         <div style="text-align: center;">
             <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="180"/>
-            <h1 style="margin-top: 0.5em;">🏠 InvisiCam – Real Estate Privacy Filter</h1>
+            <h1 style="margin-top: 0.5em;">Real Estate Privacy Filter</h1>
         </div>
         """,
         unsafe_allow_html=True
