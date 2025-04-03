@@ -7,7 +7,7 @@ from src.filters import apply_blur_with_mask_overlay
 from src.detection import detect_segmented_masks
 
 # Streamlit layout settings
-st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="centered")
+st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="wide")
 
 # Sidebar controls
 st.sidebar.title("🛠 Features")
@@ -26,6 +26,8 @@ st.sidebar.markdown("Created with 💡 for real estate listing privacy.")
 
 # App title and instructions
 with st.container():
+    st.markdown("""
+    <div style='max-width: 1100px; margin: auto;'>""", unsafe_allow_html=True)
     st.markdown(
         """
         <div style="text-align: center;">
@@ -36,8 +38,13 @@ with st.container():
         unsafe_allow_html=True
     )
 
+    st.markdown("""
+    </div>""", unsafe_allow_html=True)
+
 st.markdown("""
 InvisiCam helps blur **people, faces, and wall-mounted portraits** from real estate listing photos using modern segmentation.
+Upload a photo, choose your settings, and we'll apply smart privacy filters for you.
+""") **people, faces, and wall-mounted portraits** from real estate listing photos using modern segmentation.
 Upload a photo, choose your settings, and we'll apply smart privacy filters for you.
 """)
 
@@ -91,6 +98,7 @@ if uploaded_file:
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
+
 
 
 
