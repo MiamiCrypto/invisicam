@@ -18,7 +18,7 @@ st.sidebar.info(
 
 blur_strength = st.sidebar.slider("Blur Intensity", min_value=5, max_value=51, value=15, step=2)
 show_contours = st.sidebar.checkbox("Show Segmentation Outlines", value=False)
-outline_color = st.sidebar.color_picker("Pick Outline Color", value="#0099ff")
+outline_color = st.sidebar.color_picker("Pick Outline Color", value="#FF0000")  # Default red
 preview_only = st.sidebar.checkbox("Preview Regions Only (No Blur)", value=False)
 
 st.sidebar.markdown("---")
@@ -47,10 +47,11 @@ if uploaded_file:
     else:
         st.success(f"Blurred {len(masks)} sensitive region(s).")
 
-        # ✅ Accurate manual hex-to-BGR conversion
-        r = int(outline_color[1:3], 16)
-        g = int(outline_color[3:5], 16)
-        b = int(outline_color[5:7], 16)
+        # Accurate hex to RGB to BGR conversion for OpenCV
+        hex_color = outline_color.lstrip("#")
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
         bgr_color = (b, g, r)
 
         if preview_only:
