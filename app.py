@@ -25,9 +25,17 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("Created with 💡 for real estate listing privacy.")
 
 # App title and instructions
-st.image("https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png", width=250)
-st.title("Real Estate Privacy Filter")
-#st.title("🏠 InvisiCam – Real Estate Privacy Filter")
+with st.container():
+    st.markdown(
+        """
+        <div style="text-align: center;">
+            <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="180"/>
+            <h1 style="margin-top: 0.5em;">🏠 InvisiCam – Real Estate Privacy Filter</h1>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
 st.markdown("""
 InvisiCam helps blur **people, faces, and wall-mounted portraits** from real estate listing photos using modern segmentation.
 Upload a photo, choose your settings, and we'll apply smart privacy filters for you.
@@ -54,7 +62,7 @@ if uploaded_file:
         r = int(hex_color[0:2], 16)
         g = int(hex_color[2:4], 16)
         b = int(hex_color[4:6], 16)
-        bgr_color = (r, g, b)
+        bgr_color = (b, g, r)  # Corrected: match Streamlit RGB to OpenCV BGR
 
         if preview_only:
             result = image_np.copy()
