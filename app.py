@@ -7,7 +7,7 @@ from src.filters import apply_blur_with_mask_overlay
 from src.detection import detect_segmented_masks
 
 # Streamlit layout settings
-st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="wide")
+st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="centered")
 
 # Sidebar controls
 st.sidebar.title("🛠 Features")
@@ -51,9 +51,9 @@ if uploaded_file:
     # Run segmentation
     masks = detect_segmented_masks(image_np)
 
-    col1, col2 = st.columns([1, 1])
+    col1, col2 = st.columns([1.2, 1.2])
     with col1:
-        st.image(image_np, caption="📷 Original Image", width=480)
+        st.image(image_np, caption="📷 Original Image", use_container_width=True)
 
     if not masks:
         with col2:
@@ -87,11 +87,10 @@ if uploaded_file:
             )
 
         with col2:
-            st.image(result, caption="🔒 Privacy-Protected Image", width=480)
+            st.image(result, caption="🔒 Privacy-Protected Image", use_container_width=True)
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
-
 
 
 
