@@ -20,7 +20,7 @@ def detect_segmented_masks(image):
             class_name = seg_model.names[cls_id]
 
             # Filter for relevant privacy-sensitive classes
-            if class_name in ["person", "tv", "picture", "poster"]:
+            if class_name in ["person", "tv", "picture", "poster", "laptop", "book"]:
                 mask = results.masks.data[i].cpu().numpy()
                 masks.append(mask)
 
