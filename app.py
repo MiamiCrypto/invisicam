@@ -17,7 +17,7 @@ detection_mode = st.sidebar.selectbox(
 )
 
 blur_strength = st.sidebar.slider("Blur Intensity", min_value=5, max_value=51, value=15, step=2)
-show_contours = st.sidebar.checkbox("Show Segmentation Outlines", value=True)
+show_contours = st.sidebar.checkbox("Show Segmentation Outlines", value=False)  # Changed default to False
 
 # Optional: pick a color for the outlines
 outline_color = st.sidebar.color_picker("Pick Outline Color", value="#0099ff")
@@ -46,9 +46,10 @@ if uploaded_file:
     if not masks:
         st.warning("No sensitive content detected. Try another image.")
     else:
-        # Convert hex to BGR tuple
+        # Convert hex to BGR tuple (correctly: R, G, B → B, G, R)
         hex_color = outline_color.lstrip('#')
-        bgr_color = tuple(int(hex_color[i:i+2], 16) for i in (4, 2, 0))  # Streamlit uses RGB, OpenCV uses BGR
+        rgb_color = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+        bgr_color = (rgb_color[2], rgb_color[1], rgb_color[0])
 
         # Apply smart blur with optional overlay
         result = apply_blur_with_mask_overlay(
