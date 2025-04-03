@@ -3,37 +3,36 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import cv2
-from src.filters import apply_blur_with_overlay
-from src.detection import (
-    detect_sensitive_regions,
-    detect_faces_only,
-    detect_hybrid
-)
+from src.filters import apply_blur_with_mask_overlay
+from src.detection import detect_segmented_masks
 
-# Set Streamlit page layout
+# Streamlit layout settings
 st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="centered")
 
 # Sidebar controls
 st.sidebar.title("🛠 Features")
 detection_mode = st.sidebar.selectbox(
     "Detection Mode",
-    ["Smart (YOLOv8)", "Framed Faces (DNN)", "Hybrid (YOLO + DNN)"]
+    ["Smart Segmentation (YOLOv8-seg)"]
 )
 
 blur_strength = st.sidebar.slider("Blur Intensity", min_value=5, max_value=51, value=15, step=2)
-show_outlines = st.sidebar.checkbox("Show Outlines Around Blurred Areas", value=True)
+show_contours = st.sidebar.checkbox("Show Segmentation Outlines", value=True)
+
+# Optional: pick a color for the outlines
+outline_color = st.sidebar.color_picker("Pick Outline Color", value="#0099ff")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("Created with 💡 for real estate listing privacy.")
 
-# Title and instructions
+# App title and instructions
 st.title("🏠 InvisiCam – Real Estate Privacy Filter")
 st.markdown("""
-InvisiCam helps blur **faces, people, and personal details** from real estate listing photos.  
-Upload a photo and choose a detection mode — we'll highlight and blur any sensitive regions for you.
+InvisiCam helps blur **people, faces, and wall-mounted portraits** from real estate listing photos using modern segmentation.
+Upload a photo, choose your settings, and we'll apply smart privacy filters for you.
 """)
 
-# Upload section
+# Image upload
 uploaded_file = st.file_uploader("📤 Upload a listing image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
@@ -41,23 +40,27 @@ if uploaded_file:
     image_np = np.array(image.convert("RGB"))
     st.image(image_np, caption="📷 Original Image", use_container_width=True)
 
-    # Run detection based on selected mode
-    if detection_mode == "Smart (YOLOv8)":
-        boxes = detect_sensitive_regions(image_np)
-    elif detection_mode == "Framed Faces (DNN)":
-        boxes = detect_faces_only(image_np)
+    # Run segmentation
+    masks = detect_segmented_masks(image_np)
+
+    if not masks:
+        st.warning("No sensitive content detected. Try another image.")
     else:
-        boxes = detect_hybrid(image_np)
+        # Convert hex to BGR tuple
+        hex_color = outline_color.lstrip('#')
+        bgr_color = tuple(int(hex_color[i:i+2], 16) for i in (4, 2, 0))  # Streamlit uses RGB, OpenCV uses BGR
 
-    if not boxes:
-        st.warning("No sensitive content detected. Try another image or detection mode.")
-    else:
-        # Apply blur with optional outline
-        blurred_image = apply_blur_with_overlay(image_np, boxes, strength=blur_strength, show_outline=show_outlines)
+        # Apply smart blur with optional overlay
+        result = apply_blur_with_mask_overlay(
+            image_np,
+            masks,
+            strength=blur_strength,
+            draw_outline=show_contours,
+            outline_color=bgr_color
+        )
 
-        st.image(blurred_image, caption="🔒 Privacy-Protected Image", use_container_width=True)
+        st.image(result, caption="🔒 Privacy-Protected Image", use_container_width=True)
 
-        # Encode for download
-        result_bytes = cv2.imencode('.jpg', cv2.cvtColor(blurred_image, cv2.COLOR_RGB2BGR))[1].tobytes()
+        result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📥 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
 
