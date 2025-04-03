@@ -30,7 +30,7 @@ with st.container():
         """
         <div style="text-align: center;">
             <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="180"/>
-            <h1 style="margin-top: 0.5em;">Real Estate Privacy Filter</h1>
+            <h1 style="margin-top: 0.5em;">🏠 InvisiCam – Real Estate Privacy Filter</h1>
         </div>
         """,
         unsafe_allow_html=True
@@ -83,7 +83,7 @@ if uploaded_file:
             )
 
         st.image(result, caption="🔒 Privacy-Protected Image", use_container_width=True)
-        st.write(f"🎨 Selected HEX: {outline_color} → Converted BGR: {bgr_color}")
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
+
