@@ -52,8 +52,8 @@ if uploaded_file:
 
         # Fix color conversion from hex to BGR
         hex_color = outline_color.lstrip('#')
-        rgb_color = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
-        bgr_color = tuple(int(hex_color[i:i+2], 16) for i in (4, 2, 0))
+rgb_color = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+bgr_color = (rgb_color[2], rgb_color[1], rgb_color[0])
 
         if preview_only:
             result = image_np.copy()
@@ -76,4 +76,3 @@ if uploaded_file:
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
-
