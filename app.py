@@ -9,6 +9,7 @@ from src.detection import (
     detect_faces_only,
     detect_hybrid
 )
+from src.edges import apply_sobel_edges
 
 # Streamlit layout settings
 st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="centered")
@@ -21,6 +22,7 @@ detection_mode = st.sidebar.selectbox(
 )
 
 blur_strength = st.sidebar.slider("Blur Intensity", min_value=5, max_value=51, value=15, step=2)
+apply_edge_overlay = st.sidebar.checkbox("Overlay Sobel Edge Detection")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("Created with 💡 for real estate listing privacy.")
@@ -33,7 +35,7 @@ Upload a photo and choose a detection mode — we'll protect sensitive regions b
 """)
 
 # Image upload interface
-uploaded_file = st.file_uploader("📤 Upload a listing image", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("📄 Upload a listing image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
     image = Image.open(uploaded_file)
@@ -53,6 +55,10 @@ if uploaded_file:
     else:
         # Apply blur
         blurred_image = apply_blur(image_np, boxes, strength=blur_strength)
+
+        # Optional: Apply Sobel edge detection overlay
+        if apply_edge_overlay:
+            blurred_image = apply_sobel_edges(blurred_image)
 
         # Display result
         st.image(blurred_image, caption="🔒 Privacy-Protected Image", use_container_width=True)
