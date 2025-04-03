@@ -3,6 +3,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import cv2
+import matplotlib.colors as mcolors
 from src.filters import apply_blur_with_mask_overlay
 from src.detection import detect_segmented_masks
 
@@ -17,11 +18,8 @@ st.sidebar.info(
 )
 
 blur_strength = st.sidebar.slider("Blur Intensity", min_value=5, max_value=51, value=15, step=2)
-show_contours = st.sidebar.checkbox("Show Segmentation Outlines", value=False)  # Default to off
-
-# Optional: pick a color for the outlines
+show_contours = st.sidebar.checkbox("Show Segmentation Outlines", value=False)
 outline_color = st.sidebar.color_picker("Pick Outline Color", value="#0099ff")
-
 preview_only = st.sidebar.checkbox("Preview Regions Only (No Blur)", value=False)
 
 st.sidebar.markdown("---")
@@ -50,10 +48,10 @@ if uploaded_file:
     else:
         st.success(f"Blurred {len(masks)} sensitive region(s).")
 
-        # Fix color conversion from hex to BGR
-        hex_color = outline_color.lstrip('#')
-        rgb_color = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
-        bgr_color = (rgb_color[2], rgb_color[1], rgb_color[0])
+        # Convert hex to BGR using matplotlib for accurate color
+        rgb_float = mcolors.to_rgb(outline_color)  # (R, G, B) in [0, 1]
+        rgb = tuple(int(x * 255) for x in rgb_float)
+        bgr_color = (rgb[2], rgb[1], rgb[0])  # Convert RGB → BGR
 
         if preview_only:
             result = image_np.copy()
@@ -62,7 +60,8 @@ if uploaded_file:
                 mask = (mask > 0.5).astype(np.uint8)
                 mask = cv2.resize(mask, (result.shape[1], result.shape[0]))
                 contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                cv2.drawContours(result, contours, -1, bgr_color, thickness=4)
+                cv2.drawContours(mask_overlay, contours, -1, bgr_color, thickness=4)
+            result = cv2.addWeighted(result, 1, mask_overlay, 1, 0)
         else:
             result = apply_blur_with_mask_overlay(
                 image_np,
@@ -76,3 +75,4 @@ if uploaded_file:
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
+
