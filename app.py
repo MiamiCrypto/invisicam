@@ -7,7 +7,7 @@ from src.filters import apply_blur_with_mask_overlay
 from src.detection import detect_segmented_masks
 
 # Streamlit layout settings
-st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="centered")
+st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="wide")
 
 # Sidebar controls
 st.sidebar.title("🛠 Features")
@@ -29,8 +29,8 @@ with st.container():
     st.markdown(
         """
         <div style="text-align: center;">
-            <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="120"/>
-            <h1 style="margin-top: 0.5em;">🏠 InvisiCam – Real Estate Privacy Filter</h1>
+            <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="90"/>
+            <h1 style="margin-top: 0.5em; font-size: 2.5em;">🏠 InvisiCam – Real Estate Privacy Filter</h1>
         </div>
         """,
         unsafe_allow_html=True
@@ -51,9 +51,9 @@ if uploaded_file:
     # Run segmentation
     masks = detect_segmented_masks(image_np)
 
-    col1, col2 = st.columns([2, 2])
+    col1, col2 = st.columns([1, 1], gap="large")
     with col1:
-        st.image(image_np, caption="📷 Original Image", use_container_width=True)
+        st.image(image_np, caption="📷 Original Image", use_column_width=True)
 
     if not masks:
         with col2:
@@ -87,7 +87,7 @@ if uploaded_file:
             )
 
         with col2:
-            st.image(result, caption="🔒 Privacy-Protected Image", use_container_width=True)
+            st.image(result, caption="🔒 Privacy-Protected Image", use_column_width=True)
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
