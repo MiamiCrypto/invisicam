@@ -7,7 +7,7 @@ from src.filters import apply_blur_with_mask_overlay
 from src.detection import detect_segmented_masks
 
 # Streamlit layout settings
-st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="centered")
+st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="wide")
 
 # Sidebar controls
 st.sidebar.title("🛠 Features")
