@@ -7,7 +7,7 @@ from src.filters import apply_blur_with_mask_overlay
 from src.detection import detect_segmented_masks
 
 # Streamlit layout settings
-st.set_page_config(page_title="InvisiCam – Privacy Filter for Real Estate", layout="wide")
+st.set_page_config(page_title="InvisiCam – Real Estate Privacy Filter", layout="wide")
 
 # Sidebar controls
 st.sidebar.title("🛠 Features")
@@ -28,9 +28,9 @@ st.sidebar.markdown("Created with 💡 for real estate listing privacy.")
 with st.container():
     st.markdown(
         """
-        <div style="display: flex; align-items: center; justify-content: center; gap: 1em;">
+        <div style="text-align: center;">
             <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="150"/>
-            <h1 style="margin: 0; font-size: 2.2em;">InvisiCam – Privacy Filter for Real Estate</h1>
+            <h1 style="margin-top: 0.25em; font-size: 2.2em;">InvisiCam – Privacy Filter for Real Estate</h1>
         </div>
         """,
         unsafe_allow_html=True
