@@ -26,7 +26,8 @@ st.sidebar.markdown("Created with 💡 for real estate listing privacy.")
 
 # App title and instructions
 st.image("https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png", width=250)
-st.title("🏠 InvisiCam – Real Estate Privacy Filter")
+st.title("Real Estate Privacy Filter")
+#st.title("🏠 InvisiCam – Real Estate Privacy Filter")
 st.markdown("""
 InvisiCam helps blur **people, faces, and wall-mounted portraits** from real estate listing photos using modern segmentation.
 Upload a photo, choose your settings, and we'll apply smart privacy filters for you.
