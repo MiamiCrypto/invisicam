@@ -29,7 +29,7 @@ with st.container():
     st.markdown(
         """
         <div style="display: flex; align-items: center; justify-content: center; gap: 1em;">
-            <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="120"/>
+            <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="150"/>
             <h1 style="margin: 0; font-size: 2.2em;">InvisiCam – Privacy Filter for Real Estate</h1>
         </div>
         """,
