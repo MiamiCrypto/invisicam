@@ -11,8 +11,9 @@ def apply_sobel_edges(image):
     normalized = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX)
     edge_map = np.uint8(normalized)
 
-    # Convert single channel back to RGB for overlay
+    # Convert back to RGB to blend with original
     edge_rgb = cv2.cvtColor(edge_map, cv2.COLOR_GRAY2RGB)
     blended = cv2.addWeighted(image, 0.8, edge_rgb, 0.2, 0)
 
     return blended
+
