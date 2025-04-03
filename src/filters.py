@@ -6,8 +6,8 @@ def apply_blur(image, boxes, strength=15):
     for (x, y, w, h) in boxes:
         roi = result[y:y+h, x:x+w]
 
-        # Adjust kernel size based on blur strength from slider
-        k_w = max(3, strength) | 1  # Ensure kernel is odd
+        # Scale blur size based on user input (strength)
+        k_w = max(3, strength) | 1  # Ensure odd kernel size
         k_h = max(3, strength) | 1
 
         blurred = cv2.GaussianBlur(roi, (k_w, k_h), 0)
