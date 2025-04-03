@@ -48,10 +48,9 @@ if uploaded_file:
         st.success(f"Blurred {len(masks)} sensitive region(s).")
 
         # ✅ Accurate manual hex-to-BGR conversion
-        hex_color = outline_color  # e.g. "#FF0000"
-        r = int(hex_color[1:3], 16)
-        g = int(hex_color[3:5], 16)
-        b = int(hex_color[5:7], 16)
+        r = int(outline_color[1:3], 16)
+        g = int(outline_color[3:5], 16)
+        b = int(outline_color[5:7], 16)
         bgr_color = (b, g, r)
 
         if preview_only:
