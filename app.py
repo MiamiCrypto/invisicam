@@ -3,7 +3,6 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 import cv2
-import matplotlib.colors as mcolors
 from src.filters import apply_blur_with_mask_overlay
 from src.detection import detect_segmented_masks
 
@@ -48,10 +47,12 @@ if uploaded_file:
     else:
         st.success(f"Blurred {len(masks)} sensitive region(s).")
 
-        # Convert hex to BGR using matplotlib for accurate color
-        rgb_float = mcolors.to_rgb(outline_color)  # (R, G, B) in [0, 1]
-        rgb = tuple(int(x * 255) for x in rgb_float)
-        bgr_color = (rgb[2], rgb[1], rgb[0])  # Convert RGB → BGR
+        # ✅ Accurate manual hex-to-BGR conversion
+        hex_color = outline_color.lstrip("#")
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+        bgr_color = (b, g, r)
 
         if preview_only:
             result = image_np.copy()
@@ -75,4 +76,5 @@ if uploaded_file:
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
+
 
