@@ -29,7 +29,7 @@ with st.container():
     st.markdown(
         """
         <div style="text-align: center;">
-            <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="180"/>
+            <img src="https://raw.githubusercontent.com/MiamiCrypto/invisicam/main/images/invisicamlogo.png" width="120"/>
             <h1 style="margin-top: 0.5em;">🏠 InvisiCam – Real Estate Privacy Filter</h1>
         </div>
         """,
@@ -51,7 +51,7 @@ if uploaded_file:
     # Run segmentation
     masks = detect_segmented_masks(image_np)
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([1.1, 1.1])
     with col1:
         st.image(image_np, caption="📷 Original Image", use_container_width=True)
 
