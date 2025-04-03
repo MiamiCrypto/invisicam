@@ -23,3 +23,4 @@ def apply_blur_with_mask_overlay(image, masks, strength=15, draw_outline=True, o
 
     return result
 
+
