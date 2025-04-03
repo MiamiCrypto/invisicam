@@ -4,7 +4,7 @@ import numpy as np
 
 def apply_blur_with_mask_overlay(image, masks, strength=15, draw_outline=True, outline_color=(0, 153, 255)):
     result = image.copy()
-    overlay = np.zeros_like(image, dtype=np.uint8)
+    outline_overlay = np.zeros_like(image, dtype=np.uint8)
 
     for mask in masks:
         mask = (mask > 0.5).astype(np.uint8)
@@ -19,8 +19,10 @@ def apply_blur_with_mask_overlay(image, masks, strength=15, draw_outline=True, o
 
         if draw_outline:
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            cv2.drawContours(result, contours, -1, outline_color, thickness=4)
+            cv2.drawContours(outline_overlay, contours, -1, outline_color, thickness=4)
 
+    # Blend result with colored outline overlay
+    result = cv2.addWeighted(result, 1, outline_overlay, 1, 0)
     return result
 
 
