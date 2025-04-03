@@ -73,6 +73,8 @@ if uploaded_file:
             )
 
         st.image(result, caption="🔒 Privacy-Protected Image", use_container_width=True)
+st.write(f"🎨 Selected HEX: {outline_color} → Converted BGR: {bgr_color}")
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
+
