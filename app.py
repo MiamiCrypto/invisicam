@@ -48,10 +48,10 @@ if uploaded_file:
         st.success(f"Blurred {len(masks)} sensitive region(s).")
 
         # ✅ Accurate manual hex-to-BGR conversion
-        hex_color = outline_color.lstrip("#")
-        r = int(hex_color[0:2], 16)
-        g = int(hex_color[2:4], 16)
-        b = int(hex_color[4:6], 16)
+        hex_color = outline_color  # e.g. "#FF0000"
+        r = int(hex_color[1:3], 16)
+        g = int(hex_color[3:5], 16)
+        b = int(hex_color[5:7], 16)
         bgr_color = (b, g, r)
 
         if preview_only:
@@ -76,5 +76,3 @@ if uploaded_file:
 
         result_bytes = cv2.imencode(".jpg", cv2.cvtColor(result, cv2.COLOR_RGB2BGR))[1].tobytes()
         st.download_button("📅 Download Blurred Image", data=result_bytes, file_name="invisicam_output.jpg")
-
-
